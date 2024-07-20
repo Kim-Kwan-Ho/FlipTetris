@@ -5,8 +5,8 @@ using UnityEngine.UIElements;
 public class Cube : BaseBehaviour
 {
     [SerializeField] private GameObject _cubeSample;
-    [SerializeField] private GameObject _instSample;
     [SerializeField] private CubeLandingPoint[] _childrens;
+    private GameObject _instSample;
 
     protected override void Awake()
     {
@@ -38,6 +38,11 @@ public class Cube : BaseBehaviour
         transform.position = new Vector3(position.x, Constants.CUBE_DROP_HEIGHT, position.z);
         foreach (var VARIABLE in _childrens)
         {
+            if (VARIABLE.CheckLandingPoint(position.x, position.z) <= -40)
+            {
+                yPos = -50;
+                break;
+            }
             if (VARIABLE.CheckLandingPoint(position.x, position.z) > -10f)
             {
                 yPos = Math.Max(yPos, VARIABLE.CheckLandingPoint(position.x, position.z));
@@ -60,8 +65,9 @@ public class Cube : BaseBehaviour
             map.SetCube(VARIABLE.transform);
         }
         Destroy(_instSample);
-        Destroy(this);
+        Destroy(this.gameObject);
     }
+
 
 #if UNITY_EDITOR
     protected override void OnBindField()

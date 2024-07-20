@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CubeSimulator : BaseBehaviour
 {
-
-    [SerializeField] private GameObject _cubePrefab;
+    [SerializeField] private GameObject[] _cubes;
     private Cube _cube;
     [SerializeField] private bool[,] _cubeBatch = new bool[3, Constants.CUBE_MAXSIZE];
-    [SerializeField] private List<GameObject> _sampleCubeList;
     [SerializeField] private LayerMask _layer;
     [SerializeField] private Map _map;
     protected override void Awake()
@@ -50,39 +50,13 @@ public class CubeSimulator : BaseBehaviour
 
     private void GetNextCube()
     {
-        _cube = Instantiate(_sampleCubeList[0]).GetComponent<Cube>();
+        ChangeCube();
     }
 
     private void ChangeCube()
     {
-        for (int i = 0; i < _cubeBatch.GetLength(0); i++)
-        {
-            for (int j = 0; j < Constants.CUBE_MAXSIZE; j++)
-            {
-                if (!_cubeBatch[i, j])
-                {
-                    continue;
-                }
-
-                for (int k = 0; k < Constants.CUBE_MAXSIZE; k++)
-                {
-                    if (!_cubeBatch[i, k])
-                    {
-                        continue;
-                    }
-                    for (int y = 0; y < Constants.CUBE_MAXSIZE; y++)
-                    {
-                        if (_cubeBatch[i, y])
-                        {
-                            _sampleCubeList.Add(Instantiate(_cubePrefab, new Vector3(j, k, y), Quaternion.identity));
-                        }
-                    }
-                }
-            }
-
-        }
-
-
+        int c = Random.Range(0, _cubes.Length);
+        _cube = Instantiate(_cubes[c]).GetComponent<Cube>();
     }
 
 #if UNITY_EDITOR
@@ -90,7 +64,7 @@ public class CubeSimulator : BaseBehaviour
     protected override void OnBindField()
     {
         base.OnBindField();
-        _cubePrefab = Resources.Load<GameObject>("Prefabs/Cube");
+        _cubes = Resources.LoadAll<GameObject>("Prefabs/Cubes/");
         _map = GameObject.FindObjectOfType<Map>();
     }
 

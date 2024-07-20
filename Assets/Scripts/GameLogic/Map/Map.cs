@@ -25,6 +25,8 @@ public class Map : BaseBehaviour
         else
         {
             trs.SetParent(_cubes);
+            if (_map[x, y, z])
+                Debug.Log("Bug");
             _map[x, y, z] = true;
             _cubeGobs[x, y, z] = trs.gameObject;
         }
@@ -42,13 +44,12 @@ public class Map : BaseBehaviour
         foreach (var cube in cubes)
         {
             int x = (int)Math.Round(cube.transform.position.x);
-            int y = (int)cube.transform.position.y;
-            int z = (int)cube.transform.position.z;
+            int y = (int)Math.Round(cube.transform.position.y);
+            int z = (int)Math.Round(cube.transform.position.z);
             _cubeGobs[x, y, z] = cube.gameObject;
             _map[x, y, z] = true;
 
         }
-        Debug.Log(_map[2, 0, 0]);
     }
 
 
@@ -72,7 +73,7 @@ public class Map : BaseBehaviour
                     if (!_map[j, i, k])
                     {
                         matched = false;
-                        _removeXDic.Remove(i);
+                        _removeXDic[i].Clear();
                         break;
 
                     }
@@ -86,16 +87,17 @@ public class Map : BaseBehaviour
         for (int i = 0; i < Constants.MAP_SIZE; i++) // (y)아래에서 위로
         {
             bool matched = true;
+            _removeYDic[i] = new List<GameObject>();
+
             for (int j = 0; j < Constants.MAP_SIZE; j++)
             {
-                _removeYDic[i] = new List<GameObject>();
                 for (int k = 0; k < Constants.MAP_SIZE; k++)
                 {
                     _removeYDic[i].Add(_cubeGobs[i, j, k]);
                     if (!_map[i, j, k])
                     {
                         matched = false;
-                        _removeYDic.Remove(i);
+                        _removeYDic[i].Clear();
 
                         break;
                     }
@@ -125,8 +127,13 @@ public class Map : BaseBehaviour
         int c = _removeQueue.Count;
         for (int i = 0; i < c; i++)
         {
-            Destroy(_removeQueue.Dequeue());
+            if (_removeQueue.Peek() != null)
+            {
+                Destroy(_removeQueue.Dequeue());
+            }
         }
+        ChangeMapDirection();
+
     }
 
 #if UNITY_EDITOR
