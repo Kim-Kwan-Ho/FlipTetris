@@ -52,6 +52,18 @@ public class Cube : BaseBehaviour
         yPos = (float)Math.Round(yPos, 2);
         _instSample.transform.position = new Vector3(transform.position.x, yPos + 0.5f, transform.position.z);
     }
+
+    public bool Dropable()
+    {
+        if (_instSample.transform.position.y > 10)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     public void DropCube(Map map)
     {
         transform.position = _instSample.transform.position;

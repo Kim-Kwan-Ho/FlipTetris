@@ -49,16 +49,19 @@ public class CubeSimulator : BaseBehaviour
         {
             Vector3 spawnPoint = new Vector3((float)Math.Round(hit.point.x), (hit.point.y), (float)Math.Round(hit.point.z));
             _cube.CheckLandingPoint(spawnPoint);
-            if (Input.GetMouseButtonDown(0))
-            {
-                DropCube(spawnPoint);
-            }
-        }
 
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            DropCube();
+        }
     }
 
-    private void DropCube(Vector3 position)
+    private void DropCube()
     {
+        if (!_cube.Dropable())
+            return;
+
         _cube.DropCube(_map);
         _cube = null;
         if (_gamePlaying)

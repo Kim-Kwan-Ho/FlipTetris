@@ -15,6 +15,11 @@ public class SampleCube : BaseBehaviour
         {
             VARIABLE.enabled = MapController.Rotatable;
         }
+
+        if (!MapController.Rotatable)
+        {
+            transform.position = new Vector3(transform.position.x, Constants.CUBE_DROP_HEIGHT, transform.position.z);
+        }
         foreach (var VARIABLE in _cubesMesh)
         {
             if (VARIABLE.transform.position.y >= Constants.MAP_SIZE - 0.5f)

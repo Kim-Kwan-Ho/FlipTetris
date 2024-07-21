@@ -38,6 +38,7 @@ public class Map : BaseBehaviour
                 Debug.Log("Bug");
             _map[x, y, z] = true;
             _cubeGobs[x, y, z] = trs.gameObject;
+            GameSceneManager.Instance.GameSceneEvent.CallOnAddScore(ScoreSystem.SCORE_CUBE_BATCH);
         }
 
     }
@@ -181,6 +182,9 @@ public class Map : BaseBehaviour
                 go.GetComponent<CubeLandingPoint>().ExplodeCube();
                 Destroy(go);
             }
+
+            GameSceneManager.Instance.GameSceneEvent.CallOnAddScore(count * ScoreSystem.SCORE_CUBE_MATCH + (ScoreSystem.SCORE_CUBE_COMBO * (count - 1)));
+
         }
     }
 

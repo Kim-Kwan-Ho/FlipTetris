@@ -70,17 +70,25 @@ public class MapController : BaseBehaviour
         {
             StartCoroutine(CoRotateMap(-Vector3.right));
         }
+        else if (Input.GetKeyDown(PlayerKey.RotateYRight))
+        {
+            StartCoroutine(CoRotateMap(-Vector3.down));
+        }
+        else if (Input.GetKeyDown(PlayerKey.RotateYLEFT))
+        {
+            StartCoroutine(CoRotateMap(Vector3.down));
+        }
     }
 
     private IEnumerator CoRotateMap(Vector3 axis)
     {
         Rotatable = false;
         int curAngle = 0;
-
+        int step = Constants.VIEW_SPEED;
         while (curAngle < _targetAngle)
         {
-            transform.Rotate(axis, 1, Space.World);
-            curAngle++;
+            transform.Rotate(axis, step, Space.World);
+            curAngle += step;
             yield return null;
         }
         _map.ChangeMapDirection();
