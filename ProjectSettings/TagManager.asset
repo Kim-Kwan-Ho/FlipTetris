@@ -7,6 +7,7 @@ TagManager:
   - Center
   - CameraPositions
   - Wall
+  - SampleViewPoint
   layers:
   - Default
   - TransparentFX

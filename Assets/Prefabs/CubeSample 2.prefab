@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9018614853494909148}
+  - component: {fileID: 1093859639439896245}
   m_Layer: 0
   m_Name: CubeSample 2
   m_TagString: Untagged
@@ -34,6 +35,25 @@ Transform:
   - {fileID: 3278793206986514165}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1093859639439896245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903049797917768845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b076ed227797f54fbc870bf6a909785, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pivot: {fileID: 0}
+  _cubesMesh:
+  - {fileID: 1756577008948778315}
+  - {fileID: 155974751354154189}
+  - {fileID: 6955221478144328006}
+  _normalMaterial: {fileID: 2100000, guid: 3bb468166e5378648a851c59379474b0, type: 2}
+  _warningMaterial: {fileID: 2100000, guid: d93e90db9eb1cd64b839c684a9ee6c84, type: 2}
 --- !u!1 &4131166838973989445
 GameObject:
   m_ObjectHideFlags: 0

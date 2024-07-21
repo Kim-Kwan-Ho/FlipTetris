@@ -2,18 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SampleCube : MonoBehaviour
+public class SampleCube : BaseBehaviour
 {
-    [SerializeField] private GameObject _pivot;
+    [SerializeField] private MeshRenderer[] _cubesMesh;
+    [SerializeField] private Material _normalMaterial;
+    [SerializeField] private Material _warningMaterial;
 
-    public void SetRotation(Quaternion quaternion)
+
+    private void Update()
     {
-        transform.rotation = quaternion;
+        foreach (var VARIABLE in _cubesMesh)
+        {
+            VARIABLE.enabled = MapController.Rotatable;
+        }
+        foreach (var VARIABLE in _cubesMesh)
+        {
+            if (VARIABLE.transform.position.y >= Constants.MAP_SIZE - 0.5f)
+            {
+                VARIABLE.material = _warningMaterial;
+            }
+            else
+            {
+                VARIABLE.material = _normalMaterial;
+            }
+        }
     }
 
-    public Vector3 GetPivotOffSet()
+
+#if UNITY_EDITOR
+    protected override void OnBindField()
     {
-        return _pivot.transform.localPosition;
+        base.OnBindField();
+        _cubesMesh = GetComponentsInChildrenExceptThis<MeshRenderer>().ToArray();
     }
+#endif
 
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,18 +6,37 @@ public class CubeSimulator : BaseBehaviour
 {
     [SerializeField] private GameObject[] _cubes;
     private Cube _cube;
-    [SerializeField] private bool[,] _cubeBatch = new bool[3, Constants.CUBE_MAXSIZE];
     [SerializeField] private LayerMask _layer;
     [SerializeField] private Map _map;
-    protected override void Awake()
+    [SerializeField] private bool _gamePlaying;
+    [SerializeField] private GameObject _sampleViewPoint;
+    protected override void Initialize()
     {
-        GetNextCube();
+        base.Initialize();
+        _gamePlaying = true;
     }
+
+
+    private void Start()
+    {
+        GameSceneManager.Instance.GameSceneEvent.OnGameOver += GameOverEvent;
+        GameSceneManager.Instance.GameSceneEvent.OnGameStart += GameStartEvent;
+    }
+
+    private void OnDestroy()
+    {
+        GameSceneManager.Instance.GameSceneEvent.OnGameOver -= GameOverEvent;
+        GameSceneManager.Instance.GameSceneEvent.OnGameStart -= GameStartEvent;
+    }
+
     private void Update()
     {
+        if (!_gamePlaying || !MapController.Rotatable)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Space) && _cube == null)
         {
-            GetNextCube();
+            SpawnCube();
         }
         if (_cube == null)
         {
@@ -35,7 +52,6 @@ public class CubeSimulator : BaseBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 DropCube(spawnPoint);
-                _cube = null;
             }
         }
 
@@ -44,19 +60,33 @@ public class CubeSimulator : BaseBehaviour
     private void DropCube(Vector3 position)
     {
         _cube.DropCube(_map);
-        _map.CheckMatch();
-
+        _cube = null;
+        if (_gamePlaying)
+        {
+            _map.CheckMatch();
+            SpawnCube();
+        }
     }
 
-    private void GetNextCube()
-    {
-        ChangeCube();
-    }
-
-    private void ChangeCube()
+    private void SpawnCube()
     {
         int c = Random.Range(0, _cubes.Length);
         _cube = Instantiate(_cubes[c]).GetComponent<Cube>();
+    }
+
+    private void GameOverEvent(GameSceneEvents gameSceneEvents)
+    {
+        _gamePlaying = false;
+        if (_cube == null)
+            return;
+        _cube.DestroyCube();
+        _cube = null;
+    }
+
+    private void GameStartEvent(GameSceneEvents gameSceneEvents)
+    {
+        SpawnCube();
+        _gamePlaying = true;
     }
 
 #if UNITY_EDITOR
@@ -66,12 +96,7 @@ public class CubeSimulator : BaseBehaviour
         base.OnBindField();
         _cubes = Resources.LoadAll<GameObject>("Prefabs/Cubes/");
         _map = GameObject.FindObjectOfType<Map>();
-    }
-
-    protected override void OnButtonField()
-    {
-        base.OnButtonField();
-        ChangeCube();
+        _sampleViewPoint = GameObject.FindGameObjectWithTag("SampleViewPoint");
     }
 #endif
 }

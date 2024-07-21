@@ -6,19 +6,15 @@ using UnityEngine;
 public class MapController : BaseBehaviour
 {
     [SerializeField] private int _targetAngle = 90;
-    private bool _rotatable;
+    public static bool Rotatable;
     [SerializeField] private GameObject[] _walls;
     [SerializeField] private Map _map;
 
-    protected override void Awake()
-    {
-        base.Awake();
-    }
 
     protected override void Initialize()
     {
         base.Initialize();
-        _rotatable = true;
+        Rotatable = true;
         foreach (var VARIABLE in _walls)
         {
             if (VARIABLE.transform.position.y > -0.4f)
@@ -32,9 +28,29 @@ public class MapController : BaseBehaviour
         }
     }
 
+    private void Start()
+    {
+        GameSceneManager.Instance.GameSceneEvent.OnGameOver += GameOverEvent;
+        GameSceneManager.Instance.GameSceneEvent.OnGameStart += GameStartEvent;
+    }
+
+    private void OnDestroy()
+    {
+        GameSceneManager.Instance.GameSceneEvent.OnGameOver -= GameOverEvent;
+        GameSceneManager.Instance.GameSceneEvent.OnGameStart -= GameStartEvent;
+    }
+    private void GameOverEvent(GameSceneEvents gameSceneEvents)
+    {
+        Rotatable = false;
+    }
+
+    private void GameStartEvent(GameSceneEvents gameSceneEvents)
+    {
+        Initialize();
+    }
     private void Update()
     {
-        if (!_rotatable)
+        if (!Rotatable)
             return;
 
 
@@ -58,7 +74,7 @@ public class MapController : BaseBehaviour
 
     private IEnumerator CoRotateMap(Vector3 axis)
     {
-        _rotatable = false;
+        Rotatable = false;
         int curAngle = 0;
 
         while (curAngle < _targetAngle)
@@ -81,13 +97,9 @@ public class MapController : BaseBehaviour
                 VARIABLE.GetComponent<Collider>().enabled = true;
             }
         }
-        _rotatable = true;
+        Rotatable = true;
     }
 
-    public void StackCube(Cube cube)
-    {
-
-    }
 
 #if UNITY_EDITOR
     protected override void OnBindField()

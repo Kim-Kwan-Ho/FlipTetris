@@ -48,7 +48,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cubeSample: {fileID: 2903049797917768845, guid: 64898f04cac96fa49b132d1380c09d5b, type: 3}
-  _instSample: {fileID: 0}
   _childrens:
   - {fileID: 301772506705299739}
   - {fileID: 1434580436525438497}
@@ -171,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99897c68ff68ee40b4f9d3e9087aa8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _explodeParticle: {fileID: 6835705252701834815, guid: 0e656ab1ef2ad6b42b658bc7917b8f50, type: 3}
 --- !u!1 &4437552212152097255
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99897c68ff68ee40b4f9d3e9087aa8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _explodeParticle: {fileID: 6835705252701834815, guid: 0e656ab1ef2ad6b42b658bc7917b8f50, type: 3}
 --- !u!1 &9170527513551034229
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,3 +408,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99897c68ff68ee40b4f9d3e9087aa8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _explodeParticle: {fileID: 6835705252701834815, guid: 0e656ab1ef2ad6b42b658bc7917b8f50, type: 3}

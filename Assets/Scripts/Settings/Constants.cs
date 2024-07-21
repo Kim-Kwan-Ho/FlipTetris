@@ -7,7 +7,7 @@ public static class Constants
     public const int MAP_SIZE = 5;
     public const int CUBE_MAXSIZE = 4;
     public const int CUBE_SIMUL_LAYER = 10;
-    public const int CUBE_DROP_HEIGHT = 12;
+    public const int CUBE_DROP_HEIGHT = 15;
 }
 
 public static class SavePath

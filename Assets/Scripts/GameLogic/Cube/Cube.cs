@@ -13,10 +13,6 @@ public class Cube : BaseBehaviour
         base.Awake();
     }
 
-    private void Update()
-    {
-    }
-
 
     protected override void Initialize()
     {
@@ -30,7 +26,7 @@ public class Cube : BaseBehaviour
         _instSample = Instantiate(_cubeSample, new Vector3(0, Constants.CUBE_DROP_HEIGHT, 0), Quaternion.identity);
     }
 
-
+    
     public void CheckLandingPoint(Vector3 position)
     {
         float yPos = float.MinValue;
@@ -67,6 +63,13 @@ public class Cube : BaseBehaviour
         Destroy(_instSample);
         Destroy(this.gameObject);
     }
+
+    public void DestroyCube()
+    {
+        Destroy(_instSample);
+        Destroy(this.gameObject);
+    }
+
 
 
 #if UNITY_EDITOR

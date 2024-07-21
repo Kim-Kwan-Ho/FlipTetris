@@ -10,9 +10,18 @@ public class Map : BaseBehaviour
     private GameObject[,,] _cubeGobs = new GameObject[Constants.MAP_SIZE, Constants.MAP_SIZE, Constants.MAP_SIZE];
     private Dictionary<int, List<GameObject>> _removeXDic;
     private Dictionary<int, List<GameObject>> _removeYDic;
+    private Dictionary<int, List<GameObject>> _removeZDic;
+
     private Queue<GameObject> _removeQueue;
 
-
+    private void Start()
+    {
+        GameSceneManager.Instance.GameSceneEvent.OnGameOver += GameOverEvent;
+    }
+    private void OnDestroy()
+    {
+        GameSceneManager.Instance.GameSceneEvent.OnGameOver -= GameOverEvent;
+    }
     public void SetCube(Transform trs)
     {
         int x = (int)trs.position.x;
@@ -20,7 +29,7 @@ public class Map : BaseBehaviour
         int z = (int)trs.position.z;
         if (x < 0 || x >= Constants.MAP_SIZE || y < 0 || y >= Constants.MAP_SIZE || z < 0 || z >= Constants.MAP_SIZE)
         {
-
+            GameSceneManager.Instance.GameSceneEvent.CallGameOver();
         }
         else
         {
@@ -48,17 +57,20 @@ public class Map : BaseBehaviour
             int z = (int)Math.Round(cube.transform.position.z);
             _cubeGobs[x, y, z] = cube.gameObject;
             _map[x, y, z] = true;
-
         }
     }
 
-
-
+    private void GameOverEvent(GameSceneEvents gameSceneEvents)
+    {
+        _map = new bool[Constants.MAP_SIZE, Constants.MAP_SIZE, Constants.MAP_SIZE];
+        _cubeGobs = new GameObject[Constants.MAP_SIZE, Constants.MAP_SIZE, Constants.MAP_SIZE];
+    }
     public void CheckMatch()
     {
         int count = 0;
         _removeXDic = new Dictionary<int, List<GameObject>>();
         _removeYDic = new Dictionary<int, List<GameObject>>();
+        _removeZDic = new Dictionary<int, List<GameObject>>();
         _removeQueue = new Queue<GameObject>();
 
         for (int i = 0; i < Constants.MAP_SIZE; i++) // (y)아래에서 위로
@@ -108,32 +120,68 @@ public class Map : BaseBehaviour
             if (matched)
                 count++;
         }
-
-        foreach (var VARIABLE in _removeXDic)
+        for (int i = 0; i < Constants.MAP_SIZE; i++) // (y)아래에서 위로
         {
-            foreach (var VAR in VARIABLE.Value)
+            bool matched = true;
+            _removeZDic[i] = new List<GameObject>();
+
+            for (int j = 0; j < Constants.MAP_SIZE; j++)
             {
-                _removeQueue.Enqueue(VAR);
+                for (int k = 0; k < Constants.MAP_SIZE; k++)
+                {
+                    _removeZDic[i].Add(_cubeGobs[j, k, i]);
+                    if (!_map[j, k, i])
+                    {
+                        matched = false;
+                        _removeZDic[i].Clear();
+
+                        break;
+                    }
+                }
+                if (!matched)
+                    break;
+            }
+            if (matched)
+                count++;
+        }
+
+        if (count > 0)
+        {
+            foreach (var VARIABLE in _removeXDic)
+            {
+                foreach (var VAR in VARIABLE.Value)
+                {
+                    _removeQueue.Enqueue(VAR);
+                }
+            }
+            foreach (var VARIABLE in _removeYDic)
+            {
+                foreach (var VAR in VARIABLE.Value)
+                {
+                    _removeQueue.Enqueue(VAR);
+                }
+            }
+            foreach (var VARIABLE in _removeZDic)
+            {
+                foreach (var VAR in VARIABLE.Value)
+                {
+                    _removeQueue.Enqueue(VAR);
+                }
+            }
+            int c = _removeQueue.Count;
+            for (int i = 0; i < c; i++)
+            {
+                GameObject go = _removeQueue.Dequeue();
+
+                int x = (int)Math.Round(go.transform.position.x);
+                int y = (int)Math.Round(go.transform.position.y);
+                int z = (int)Math.Round(go.transform.position.z);
+                _map[x, y, z] = false;
+                _cubeGobs[x, y, z] = null;
+                go.GetComponent<CubeLandingPoint>().ExplodeCube();
+                Destroy(go);
             }
         }
-        foreach (var VARIABLE in _removeYDic)
-        {
-            foreach (var VAR in VARIABLE.Value)
-            {
-                _removeQueue.Enqueue(VAR);
-            }
-        }
-
-        int c = _removeQueue.Count;
-        for (int i = 0; i < c; i++)
-        {
-            if (_removeQueue.Peek() != null)
-            {
-                Destroy(_removeQueue.Dequeue());
-            }
-        }
-        ChangeMapDirection();
-
     }
 
 #if UNITY_EDITOR
