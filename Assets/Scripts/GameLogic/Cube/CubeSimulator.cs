@@ -75,6 +75,7 @@ public class CubeSimulator : BaseBehaviour
     {
         int c = Random.Range(0, _cubes.Length);
         _cube = Instantiate(_cubes[c]).GetComponent<Cube>();
+        _cube.SetCubeView(_sampleViewPoint.transform.position);
     }
 
     private void GameOverEvent(GameSceneEvents gameSceneEvents)

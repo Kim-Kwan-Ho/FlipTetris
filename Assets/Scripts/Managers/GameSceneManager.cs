@@ -13,17 +13,9 @@ public class GameSceneManager : BaseBehaviour
     protected override void Awake()
     {
         base.Awake();
-        if (Instance == null)
-        {
-            Instance = this;
-            GameSceneEvent.OnGameStart += GameStartEvent;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
+        Instance = this;
 
+        GameSceneEvent.OnGameStart += GameStartEvent;
         GameSceneEvent.OnAddScore += AddScoreEvent;
     }
 

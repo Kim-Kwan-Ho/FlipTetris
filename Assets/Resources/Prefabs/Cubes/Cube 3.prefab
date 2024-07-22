@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cubeSample: {fileID: 6379321072499685273, guid: 077ef613262f946469f7db6ee89fb3cd, type: 3}
+  _cubeView: {fileID: 4303996333865639680, guid: d2932f86fc93093489a987f6bb3eec13, type: 3}
   _childrens:
   - {fileID: 1995056523469572710}
   - {fileID: 1320468440100930956}

@@ -5,9 +5,10 @@ using UnityEngine.UIElements;
 public class Cube : BaseBehaviour
 {
     [SerializeField] private GameObject _cubeSample;
+    [SerializeField] private GameObject _cubeView;
     [SerializeField] private CubeLandingPoint[] _childrens;
     private GameObject _instSample;
-
+    private GameObject _instView;
     protected override void Awake()
     {
         base.Awake();
@@ -26,7 +27,7 @@ public class Cube : BaseBehaviour
         _instSample = Instantiate(_cubeSample, new Vector3(0, Constants.CUBE_DROP_HEIGHT, 0), Quaternion.identity);
     }
 
-    
+
     public void CheckLandingPoint(Vector3 position)
     {
         float yPos = float.MinValue;
@@ -73,16 +74,22 @@ public class Cube : BaseBehaviour
             map.SetCube(VARIABLE.transform);
         }
         Destroy(_instSample);
+        Destroy(_instView);
         Destroy(this.gameObject);
     }
 
     public void DestroyCube()
     {
         Destroy(_instSample);
+        Destroy(_instView);
         Destroy(this.gameObject);
     }
 
-
+    public void SetCubeView(Vector3 position)
+    {
+        _instView = Instantiate(_cubeView);
+        _instView.GetComponent<SampleCubeView>().SetPosition(position);
+    }
 
 #if UNITY_EDITOR
     protected override void OnBindField()
