@@ -34,10 +34,6 @@ public class CubeSimulator : BaseBehaviour
         if (!_gamePlaying || !MapController.Rotatable)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Space) && _cube == null)
-        {
-            SpawnCube();
-        }
         if (_cube == null)
         {
             return;

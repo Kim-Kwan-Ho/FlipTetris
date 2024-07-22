@@ -22,11 +22,7 @@ public class FadeManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F1))
-            ChangeScene("Q");
-    }
+
     public void ChangeScene(string sceneName)
     {
         StartCoroutine(FadeOut(sceneName));

@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class Ranking : BaseBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _rankingText;
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _scoreText;
 
-    public void SetRanking(int rank, int name, int score)
+    public void SetRanking(string name, int score)
     {
-        _rankingText.text = rank.ToString();
         _nameText.text = name.ToString();
         _scoreText.text = score.ToString();
     }
@@ -23,7 +21,6 @@ public class Ranking : BaseBehaviour
     protected override void OnBindField()
     {
         base.OnBindField();
-        _rankingText = FindGameObjectInChildren<TextMeshProUGUI>("RankText");
         _nameText = FindGameObjectInChildren<TextMeshProUGUI>("NameText");
         _scoreText = FindGameObjectInChildren<TextMeshProUGUI>("ScoreText");
     }

@@ -36,8 +36,7 @@ public class ScoreUI : BaseBehaviour
 
     private void Update()
     {
-        if (!_updateScore)
-            return;
+
 
         _scoreText.text = GameSceneManager.Instance.Score.ToString();
     }

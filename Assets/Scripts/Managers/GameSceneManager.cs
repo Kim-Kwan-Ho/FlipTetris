@@ -39,13 +39,6 @@ public class GameSceneManager : BaseBehaviour
         Initialize();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GameSceneEvent.CallGameStart();
-        }
-    }
 
 
 
